@@ -1,0 +1,39 @@
+name: Ollaya Decision Models
+slug: ollaya
+version: "0.1.7"
+description: Local CPU inference for Ollaya decision models with an ingress model manager
+url: https://github.com/pier-andre/ollaya-ha-addon/tree/main/ollaya
+arch:
+  - amd64
+init: false
+startup: application
+stage: experimental
+ingress: true
+ingress_port: 8099
+# The simple HTML model manager has no need for streamed ingress bodies.
+# Streaming ingress can use chunked POST bodies without Content-Length.
+ingress_stream: false
+panel_title: Ollaya Models
+panel_icon: mdi:brain
+panel_admin: true
+host_network: false
+ports:
+  11435/tcp: null
+ports_description:
+  11435/tcp: Optional LAN API. Leave disabled for app-to-app access over the Home Assistant network.
+options:
+  default_model: laya:en
+  model_downloads_enabled: false
+  keep_alive: 5m
+  max_loaded_models: 1
+  threads: 2
+  max_queue: 16
+  api_key: ""
+schema:
+  default_model: str
+  model_downloads_enabled: bool
+  keep_alive: str
+  max_loaded_models: int(1,3)
+  threads: int(1,32)
+  max_queue: int(1,512)
+  api_key: str?

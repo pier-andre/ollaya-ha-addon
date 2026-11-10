@@ -1,0 +1,24 @@
+configuration:
+  default_model:
+    name: Modèle par défaut
+    description: Nom du modèle du registre utilisé quand une requête de décision n'en indique pas. Un choix dans l'interface prévaut jusqu'à sa réinitialisation.
+  model_downloads_enabled:
+    name: Gestion des modèles
+    description: Autoriser l'installation et la suppression de modèles dans l'interface Web authentifiée. Désactiver après la configuration. Les modèles installés restent sélectionnables.
+  keep_alive:
+    name: Durée de conservation en mémoire
+    description: Temps pendant lequel un modèle reste chargé après la dernière requête (par exemple, 5m).
+  max_loaded_models:
+    name: Nombre maximal de modèles chargés
+    description: Limiter les modèles conservés en mémoire pour maîtriser l'utilisation de la RAM.
+  threads:
+    name: Fils d'exécution CPU
+    description: Nombre de fils d'exécution utilisés pour l'inférence. Commencer avec 2 sur une machine à ressources limitées.
+  max_queue:
+    name: Taille maximale de la file d'attente
+    description: Nombre maximal de requêtes en attente durant le traitement des précédentes.
+  api_key:
+    name: Clé API
+    description: Clé privée facultative (au moins 16 caractères). Laisser vide pour en générer une, visible dans l'interface Web authentifiée.
+network:
+  11435/tcp: API d'inférence authentifiée facultative sur le réseau local. Ne pas publier pour un accès interne entre applications Home Assistant.

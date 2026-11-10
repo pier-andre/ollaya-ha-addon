@@ -1,0 +1,24 @@
+configuration:
+  default_model:
+    name: Default model
+    description: Registry model name used when a decision request does not specify one. An ingress selection overrides it until reset.
+  model_downloads_enabled:
+    name: Model management
+    description: Allow model installation and removal in the authenticated web interface. Leave disabled after setup. Existing models remain selectable.
+  keep_alive:
+    name: Keep model loaded
+    description: Duration to keep a model in memory after the last request (for example, 5m).
+  max_loaded_models:
+    name: Maximum loaded models
+    description: Limit the number of models in memory to control RAM usage.
+  threads:
+    name: CPU threads
+    description: Number of CPU threads for inference. Start with 2 on constrained hardware.
+  max_queue:
+    name: Maximum inference queue
+    description: Maximum queued requests while the model processes earlier requests.
+  api_key:
+    name: API key
+    description: Optional private key (at least 16 characters). Leave blank to generate one, visible in the authenticated web interface.
+network:
+  11435/tcp: Optional authenticated inference API on the LAN; leave unpublished for internal Home Assistant app access.
