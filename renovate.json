@@ -4,7 +4,7 @@
   "prHourlyLimit": 2,
   "bumpVersions": [
     {
-      "description": "Chaque mise à jour incrémente le patch de l'add-on (0.1.7 -> 0.1.8)",
+      "description": "Chaque mise à jour incrémente le patch de l'add-on (0.1.8 -> 0.1.9)",
       "filePatterns": ["*/config.yaml"],
       "matchStrings": ["(?:^|\\n)version:[ \\t]*\"?(?<version>\\d+\\.\\d+\\.\\d+)\"?"],
       "bumpType": "patch"

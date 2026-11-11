@@ -1,4 +1,7 @@
-# Édition CPU : image upstream épinglée à une version précise.
+# Édition CPU uniquement : l'application n'active aucun GPU, et le Supervisor ne
+# peut de toute façon pas en fournir un sous Home Assistant OS (voir
+# docs/gpu/README.md à la racine du dépôt).
+# Image upstream épinglée à une version précise.
 # `latest` a été abandonné : une reconstruction pouvait changer de moteur sans
 # que rien ne le signale, et Renovate ne pouvait rien proposer (une étiquette
 # mobile n'a pas de version à comparer). C'est désormais la PR de Renovate qui

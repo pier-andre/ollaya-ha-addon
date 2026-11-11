@@ -1,10 +1,10 @@
-# Ollaya Decision Models for Home Assistant OS (experimental CPU edition)
+# Ollaya Decision Models for Home Assistant OS (CPU-only edition)
 
 **English | [Français](docs/fr.md)**
 
 For the updated Home Assistant 0.1.7 bilingual instructions, see [DOCS.md](DOCS.md) or [documentation française](docs/fr.md).
 
-**Target:** Home Assistant OS, x86-64, CPU-only, including 8 GB RAM systems. **Status:** experimental; deployed on one Home Assistant OS setup, not broadly validated.
+**Target:** Home Assistant OS, x86-64, CPU only, including 8 GB RAM systems. This app never uses a GPU: `OLLAYA_DEVICE=cpu` is fixed in `server.py` and the startup log says so. **Tested on:** one Home Assistant OS setup; not broadly validated.
 
 ## Install
 
@@ -164,8 +164,9 @@ with `Authorization: Bearer <API key>`; returns JSON `status: ready` (200) or
 `ghcr.io/ollaya-dev/ollaya:latest` is deliberately kept as the image base. A rebuild
 may bring in an untested upstream release; record the Ollaya version when troubleshooting.
 
-GPU support is **not** enabled in this CPU app. Read `../GPU_SUPPORT.md` for an
-implementation and testing roadmap.
+GPU support is **not** enabled in this CPU-only app. Read
+[`../docs/gpu/README.md`](../docs/gpu/README.md) for why CUDA cannot work on Home
+Assistant OS, and for the conditions and steps a GPU edition would need.
 
 ## v0.1.7 bilingual model management
 

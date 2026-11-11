@@ -2,6 +2,20 @@
 
 ## Non publié
 
+## 0.1.9
+
+- The CPU-only nature of the app is now explicit in the app description, in the startup log (`CPU-only edition: Ollaya runs with OLLAYA_DEVICE=cpu`) and in the English/French documentation. `OLLAYA_DEVICE` is fed by a single `DEVICE` constant instead of a literal.
+- Removed `stage: experimental` from `config.yaml`; the app no longer declares an experimental stage.
+- GPU/CUDA notes moved from `GPU_SUPPORT.md` to `docs/gpu/README.md` and expanded with the verified reasons CUDA cannot work on Home Assistant OS (no NVIDIA driver, no GPU runtime in the Supervisor) and the install types and conditions under which it could.
+- No configuration, model or storage migration.
+
+### Résumé 0.1.9
+
+- Le caractère réservé au CPU est désormais explicite dans la description de l’application, dans le journal de démarrage (`OLLAYA_DEVICE=cpu`) et dans la documentation anglaise et française.
+- Suppression de `stage: experimental` dans `config.yaml`.
+- Les notes GPU/CUDA passent de `GPU_SUPPORT.md` à `docs/gpu/README.md`, avec les raisons vérifiées de l’impossibilité de CUDA sur Home Assistant OS et les conditions d’une évolution.
+- Aucune migration de configuration, de modèles ou de stockage.
+
 ## 0.1.8
 
 - Upstream base image pinned to `ghcr.io/ollaya-dev/ollaya:0.18.0` instead of `:latest`. Both tags pointed at the same image digest (`sha256:a1baf26a…`) when this release was cut, so nothing changes at runtime; rebuilds become reproducible and the Ollaya runtime can now be updated by a Renovate pull request.

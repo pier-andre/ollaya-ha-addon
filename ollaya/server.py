@@ -32,6 +32,12 @@ INGRESS_IP = os.environ.get("OLLAYA_HA_INGRESS_IP", "172.30.32.2")
 MAX_BODY = 8 * 1024 * 1024
 MODEL_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:/-]{0,159}$")
 
+# This packaging is CPU-only and there is no option to change it. Home Assistant
+# OS ships no NVIDIA driver and the Supervisor cannot request a GPU runtime, so
+# the device is fixed here instead of being offered as a setting. Before
+# changing this, read docs/gpu/README.md in the repository.
+DEVICE = "cpu"
+
 DEFAULTS = {
     "default_model": "laya:en",
     "model_downloads_enabled": False,
@@ -683,13 +689,18 @@ a{{color:#b0e4ee}}nav{{text-align:right}}
 def main():
     DATA.mkdir(parents=True, exist_ok=True)
     print(f"[ollaya-ha] Persistent model storage: {DATA / 'models'}", flush=True)
+    print(
+        f"[ollaya-ha] CPU-only edition: Ollaya runs with OLLAYA_DEVICE={DEVICE}; "
+        "no GPU acceleration is used or available (see docs/gpu/README.md)",
+        flush=True,
+    )
     global API_KEY
     API_KEY = get_key()
     env = dict(os.environ)
     env.update({
         "OLLAYA_HOST": f"{DAEMON_HOST}:{DAEMON_PORT}",
         "OLLAYA_MODELS": str(DATA / "models"),
-        "OLLAYA_DEVICE": "cpu",
+        "OLLAYA_DEVICE": DEVICE,
         "OLLAYA_KEEP_ALIVE": str(CONFIG.get("keep_alive") or "5m"),
         "OLLAYA_MAX_LOADED_MODELS": str(CONFIG.get("max_loaded_models") or 1),
         "OLLAYA_THREADS": str(CONFIG.get("threads") or 2),
@@ -703,7 +714,11 @@ def main():
     ui = ThreadingHTTPServer(("0.0.0.0", UI_PORT), AdminHandler)
     threading.Thread(target=api.serve_forever, daemon=True).start()
     threading.Thread(target=ui.serve_forever, daemon=True).start()
-    print("[ollaya-ha] CPU runtime and secure proxy started; API port 11435; ingress port 8099", flush=True)
+    print(
+        f"[ollaya-ha] CPU-only runtime and secure proxy started (device={DEVICE}); "
+        "API port 11435; ingress port 8099",
+        flush=True,
+    )
     try:
         while child.poll() is None:
             time.sleep(1)

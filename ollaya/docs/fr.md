@@ -4,12 +4,14 @@
 
 ## Fonction et compatibilité
 
-Cette application exécute des modèles de décision Ollaya **localement sur CPU** dans Home Assistant OS Generic x86-64, sans carte graphique. Elle utilise l’image `ghcr.io/ollaya-dev/ollaya:0.18.0`, épinglée : une reconstruction redonne toujours le même moteur, et une nouvelle version d’Ollaya arrive sous forme de pull request Renovate, qui met à jour cette ligne, le `version:` de l’application et le journal des modifications dans la même PR. Les images CUDA ne sont jamais proposées ici : cette édition est réservée au CPU. L’accélération NVIDIA n’est pas encore activée.
+**Cette application est une édition réservée au CPU.** Elle exécute des modèles de décision Ollaya localement, sur le processeur, dans Home Assistant OS Generic x86-64 : elle utilise la variante CPU de `ghcr.io/ollaya-dev/ollaya:0.18.0`, le périphérique est fixé à `cpu` dans le code de l’application, le journal de démarrage l’indique, et aucune option ne permet d’activer l’accélération matérielle. Home Assistant OS ne fournit aucun pilote NVIDIA et le Supervisor ne peut pas demander d’accès GPU : l’accélération n’est donc pas une propriété que cette application peut promettre. Les raisons vérifiées, les types d’installation où elle pourrait théoriquement fonctionner et les étapes restantes sont décrites dans [`docs/gpu/README.md`](https://github.com/pier-andre/ollaya-ha-addon/blob/main/docs/gpu/README.md).
+
+L’image upstream est épinglée plutôt que mobile : une reconstruction redonne toujours le même moteur, et une nouvelle version d’Ollaya arrive sous forme de pull request Renovate, qui met à jour cette ligne, le `version:` de l’application et le journal des modifications dans la même PR. Les images CUDA ne sont jamais proposées ici.
 
 ## Installation / mise à jour
 
 1. Ajoutez `https://github.com/pier-andre/ollaya-ha-addon` comme dépôt d’applications (menu ⋮ → **Dépôts**) puis installez **Ollaya Decision Models** ; pour du développement local, copiez plutôt le contenu du dossier `ollaya/` dans `/addons/local/ollaya/`. Le dépôt doit rester public : le Supervisor le clone sans identifiants.
-2. Actualisez le magasin d’applications, installez ou **reconstruisez/mettez à jour** l’application et vérifiez la version **0.1.8**.
+2. Actualisez le magasin d’applications, installez ou **reconstruisez/mettez à jour** l’application et vérifiez la version **0.1.9**.
 3. Configurez puis démarrez l’application. Ouvrez **Open Web UI** pour accéder à l’interface Web intégrée (ingress).
 4. Activez **Gestion des modèles**, enregistrez et redémarrez l’application.
 5. Installez `laya:en` ou un autre modèle enregistré dans Ollaya. Vérifiez sa présence dans « Modèles installés ».
@@ -63,7 +65,11 @@ Le tableau de bord présente l’état et la version du moteur, les modèles cha
 
 ## Limitations
 
-Les tests automatisés locaux utilisent un moteur Ollaya simulé et ne remplacent pas un essai réel avec Home Assistant Supervisor. Les éditions GPU nécessiteront une image CUDA distincte et une validation du partage des périphériques NVIDIA ; consultez `GPU_SUPPORT.md` à la racine du dépôt.
+Les tests automatisés locaux utilisent un moteur Ollaya simulé et ne remplacent pas un essai réel avec Home Assistant Supervisor. Cette application est réservée au CPU : elle n’utilise aucun GPU et ne peut pas en activer un. Les raisons vérifiées, les types d’installation où l’accélération pourrait fonctionner et les étapes restantes sont décrites dans [`docs/gpu/README.md`](https://github.com/pier-andre/ollaya-ha-addon/blob/main/docs/gpu/README.md).
+
+## Nouveautés v0.1.9
+
+Le caractère réservé au CPU est désormais explicite dans la description de l’application, dans le journal de démarrage (`OLLAYA_DEVICE=cpu`) et dans cette documentation. La mention `stage: experimental` est retirée de `config.yaml`, et les notes GPU/CUDA sont déplacées vers `docs/gpu/README.md` avec l’explication de ce qui est possible ou non selon le type d’installation. Aucune migration de configuration, de modèles ou de stockage.
 
 ## Nouveautés v0.1.8
 

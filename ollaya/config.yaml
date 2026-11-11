@@ -1,13 +1,12 @@
 name: Ollaya Decision Models
 slug: ollaya
-version: "0.1.8"
-description: Local CPU inference for Ollaya decision models with an ingress model manager
+version: "0.1.9"
+description: CPU-only local inference for Ollaya decision models with an ingress model manager; this app never uses a GPU
 url: https://github.com/pier-andre/ollaya-ha-addon/tree/main/ollaya
 arch:
   - amd64
 init: false
 startup: application
-stage: experimental
 ingress: true
 ingress_port: 8099
 # The simple HTML model manager has no need for streamed ingress bodies.

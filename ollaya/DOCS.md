@@ -4,12 +4,14 @@
 
 ## Purpose and compatibility
 
-Run local Ollaya decision models on Generic x86-64 Home Assistant OS without a GPU. The current app packages the CPU variant of `ghcr.io/ollaya-dev/ollaya:0.18.0`; it does not enable NVIDIA GPU acceleration. The upstream tag is pinned rather than moving, so a rebuild always produces the same runtime, and a new Ollaya release arrives as a Renovate pull request that raises this tag, the app version and the changelog together. CUDA tags are never offered here: this edition is CPU-only.
+**This app is a CPU-only edition.** It runs local Ollaya decision models on Generic x86-64 Home Assistant OS using the CPU variant of `ghcr.io/ollaya-dev/ollaya:0.18.0`: the device is fixed to `cpu` in the app code, the startup log states it, and no setting can enable GPU acceleration. Home Assistant OS ships no NVIDIA driver and the Supervisor cannot request a GPU runtime, so acceleration is not a property this app can promise; the verified reasons, the install types where it could theoretically work and the outstanding steps are documented in [`docs/gpu/README.md`](https://github.com/pier-andre/ollaya-ha-addon/blob/main/docs/gpu/README.md).
+
+The upstream tag is pinned rather than moving, so a rebuild always produces the same runtime, and a new Ollaya release arrives as a Renovate pull request that raises this tag, the app version and the changelog together. CUDA tags are never offered here.
 
 ## Install / upgrade
 
 1. Add `https://github.com/pier-andre/ollaya-ha-addon` as an app repository (⋮ → **Repositories**) and install **Ollaya Decision Models**; for local development, put the `ollaya/` directory's files in `/addons/local/ollaya/` instead. The repository must stay public: the Supervisor clones it without credentials.
-2. Refresh the Home Assistant App Store, install or **rebuild/update** the app, and confirm version **0.1.8**.
+2. Refresh the Home Assistant App Store, install or **rebuild/update** the app, and confirm version **0.1.9**.
 3. Configure the app; start it and open **Open Web UI** (Home Assistant ingress).
 4. Enable **Model management**, save the configuration, and restart the app.
 5. Install `laya:en` or another Ollaya-registered model in the web UI. Confirm it appears under Installed models.
@@ -65,4 +67,4 @@ The ingress dashboard shows runtime version/readiness, model memory load status,
 
 ## Limitations
 
-Local automated tests use a mock Ollaya daemon and do not prove the image builds under Home Assistant Supervisor. GPU variants require their own upstream CUDA image and tested Supervisor GPU passthrough; see the repository's `GPU_SUPPORT.md`.
+Local automated tests use a mock Ollaya daemon and do not prove the image builds under Home Assistant Supervisor. This app is CPU-only: it uses no GPU and cannot enable one. The verified reasons, the install types where acceleration could theoretically work, and the steps remaining for a GPU edition are documented in [`docs/gpu/README.md`](https://github.com/pier-andre/ollaya-ha-addon/blob/main/docs/gpu/README.md).
