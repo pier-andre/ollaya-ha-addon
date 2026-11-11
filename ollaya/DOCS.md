@@ -46,7 +46,7 @@ Ollaya uses the persistent, app-private path `/data/ollaya/models` for downloade
 - `11435` — authenticated inference proxy, available on the Home Assistant app network. Host/LAN publishing is **disabled by default** (`11435/tcp: null`).
 - The external inference API never offers `/api/pull`, `/api/delete`, `/api/create`, or `/api/copy`.
 
-For n8n running as a Home Assistant app, try `http://local-ollaya:11435/api/decide` (check the actual app DNS hostname). Include `Authorization: Bearer <API key>` and JSON `Content-Type`. If a model is omitted, the app injects the currently selected default. For monitoring, an authenticated `GET /health` returns 200 when Ollaya is responsive, otherwise 503.
+For n8n running as a Home Assistant app, use `http://17153b35-ollaya:11435/api/decide` (the hostname is the app slug with `_` replaced by `-`; a local `/addons` copy is `local-ollaya`). Include `Authorization: Bearer <API key>` and JSON `Content-Type`. If a model is omitted, the app injects the currently selected default. For monitoring, an authenticated `GET /health` returns 200 when Ollaya is responsive, otherwise 503.
 
 For n8n outside Home Assistant, publishing 11435 permits LAN access. Keep router ports closed, restrict LAN access with firewall rules, and prefer a VPN if necessary. Home Assistant port mapping alone is **not** an internet-access guarantee.
 

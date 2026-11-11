@@ -4,6 +4,8 @@
 
 Application Home Assistant à inférence Ollaya locale sur processeur (CPU), avec gestion des modèles dans l’interface Web intégrée et API authentifiée pour n8n et les autres applications du réseau interne.
 
+[![Ouvrir votre instance Home Assistant et afficher le dialogue d’ajout du dépôt avec l’URL pré-remplie.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fpier-andre%2Follaya-ha-addon) [![Ouvrir votre instance Home Assistant et afficher la page de l’application Ollaya.](https://my.home-assistant.io/badges/supervisor_app.svg)](https://my.home-assistant.io/redirect/supervisor_app/?app=17153b35_ollaya&repository_url=https%3A%2F%2Fgithub.com%2Fpier-andre%2Follaya-ha-addon)
+
 ## Nouveautés de la version 0.1.9
 
 - Le caractère réservé au CPU est désormais explicite là où il importe : description de l’application, journal de démarrage (`CPU-only edition: Ollaya runs with OLLAYA_DEVICE=cpu`) et documentation anglaise et française. `OLLAYA_DEVICE` provient d’une constante `DEVICE` unique dans `server.py`.
@@ -32,7 +34,7 @@ Application Home Assistant à inférence Ollaya locale sur processeur (CPU), ave
 
 ## Installation ou mise à jour
 
-**Depuis ce dépôt (recommandé) :** dans Home Assistant, ouvrez **Paramètres → Applications → Magasin d’applications** → menu ⋮ → **Dépôts**, ajoutez `https://github.com/pier-andre/ollaya-ha-addon` (le dépôt doit rester public : le Supervisor le clone sans identifiants), puis installez **Ollaya Decision Models** et démarrez-la. L’application vit dans le dossier `ollaya/`, dont le nom est son identifiant : elle devient `<empreinte>_ollaya`, avec ses données dans `/data/apps/data/<empreinte>_ollaya`. Passer d’une copie locale dans `/addons` implique donc de déplacer ce dossier.
+**Depuis ce dépôt (recommandé) :** dans Home Assistant, ouvrez **Paramètres → Applications → Magasin d’applications** → menu ⋮ → **Dépôts**, ajoutez `https://github.com/pier-andre/ollaya-ha-addon` (le dépôt doit rester public : le Supervisor le clone sans identifiants), puis installez **Ollaya Decision Models** et démarrez-la. L’application vit dans le dossier `ollaya/`, dont le nom est son identifiant : elle devient `17153b35_ollaya`, avec ses données dans `/data/apps/data/17153b35_ollaya`. Le préfixe `17153b35` correspond aux huit premiers caractères hexadécimaux du SHA-1 de l’URL du dépôt : il est donc prévisible et ne change pas tant que l’URL est ajoutée exactement telle qu’écrite ci-dessus. Passer d’une copie locale dans `/addons` (identifiant `local_ollaya`) implique donc de déplacer `/data/apps/data/local_ollaya` vers `/data/apps/data/17153b35_ollaya`.
 
 **Depuis une copie locale (développement) :** copiez **le contenu du dossier `ollaya/`** dans `/addons/local/ollaya/`, actualisez le magasin des applications Home Assistant, puis **reconstruisez/mettez à jour l’image** vers la version `0.1.9` et redémarrez. Un simple redémarrage de l’ancien conteneur ne suffit pas. Les modèles installés et les clés API existantes ne doivent pas être modifiés.
 

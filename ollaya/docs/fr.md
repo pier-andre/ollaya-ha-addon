@@ -46,7 +46,7 @@ Les poids des modèles sont conservés dans `/data/ollaya/models`, un emplacemen
 - `11435` — proxy d’inférence authentifié accessible au réseau interne des applications Home Assistant. L’exposition d’un port hôte ou LAN est **désactivée par défaut** (`11435/tcp: null`).
 - L’API cliente ne donne aucun accès à `/api/pull`, `/api/delete`, `/api/create` ou `/api/copy`.
 
-Pour n8n installé comme application Home Assistant, essayez `http://local-ollaya:11435/api/decide` (vérifiez le nom DNS réel). Transmettez l’en-tête `Authorization: Bearer <clé API>` et un corps JSON (`Content-Type: application/json`). Le modèle sélectionné est ajouté automatiquement si le champ `model` est absent. Le point de contrôle authentifié `GET /health` renvoie 200 lorsque le moteur répond, sinon 503.
+Pour n8n installé comme application Home Assistant, utilisez `http://17153b35-ollaya:11435/api/decide` (le nom d’hôte est l’identifiant de l’application avec `_` remplacé par `-` ; une copie locale dans `/addons` donne `local-ollaya`). Transmettez l’en-tête `Authorization: Bearer <clé API>` et un corps JSON (`Content-Type: application/json`). Le modèle sélectionné est ajouté automatiquement si le champ `model` est absent. Le point de contrôle authentifié `GET /health` renvoie 200 lorsque le moteur répond, sinon 503.
 
 Si n8n s’exécute sur un autre ordinateur, vous pouvez publier le port 11435 sur votre réseau local. **Ne faites pas de redirection de port Internet** ; limitez l’accès avec un pare-feu ou un VPN privé. La publication d’un port Home Assistant ne garantit pas, à elle seule, son isolement d’Internet.
 

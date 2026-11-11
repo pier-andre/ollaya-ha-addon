@@ -8,7 +8,7 @@ For the updated Home Assistant 0.1.7 bilingual instructions, see [DOCS.md](DOCS.
 
 ## Install
 
-**From the repository (recommended):** in **Settings > Apps > App store**, open ⋮ → **Repositories**, add `https://github.com/pier-andre/ollaya-ha-addon`, reload, install **Ollaya Decision Models**, and start it. The repository must stay public: the Supervisor clones it without credentials. The add-on lives in the `ollaya/` folder, whose name is its slug, so Home Assistant installs it as `<hash>_ollaya`.
+**From the repository (recommended):** in **Settings > Apps > App store**, open ⋮ → **Repositories**, add `https://github.com/pier-andre/ollaya-ha-addon`, reload, install **Ollaya Decision Models**, and start it. The repository must stay public: the Supervisor clones it without credentials. The add-on lives in the `ollaya/` folder, whose name is its slug, so Home Assistant installs it as `17153b35_ollaya` (the `17153b35` prefix is the first eight hex characters of the SHA-1 of the repository URL).
 
 **From a local copy (development):** copy the `ollaya/` folder into `/addons/local/ollaya/` using your preferred Home Assistant file-access mechanism. In **Settings > Apps > App store**, use **Check for updates / Reload**, install **Ollaya Decision Models**, and start it.
 
@@ -45,14 +45,14 @@ subsequent boots. The ingress model manager displays the active storage path.
 - Internal Ollaya daemon: `127.0.0.1:11436` within the container, not accessible from other apps.
 - Filtered, API-key-protected inference proxy: port `11435` *within the Home Assistant app network*. The proxy permits decision and read-only model status calls. It **never exposes `/api/pull`, `/api/delete`, `/api/create`, or `/api/copy`**, regardless of download setting.
 - Model manager: port `8099`, reachable **only from the Home Assistant ingress gateway (172.30.32.2)**, behind HA authentication.
-- Host port mapping for `11435/tcp` defaults to `null` (disabled). Keep it disabled for n8n running as a HA app. Use the app's DNS hostname: `http://local-ollaya:11435` if installed locally, or the generated `<repository>-ollaya` hostname if installed from a remote repository. See HA app communication documentation.
+- Host port mapping for `11435/tcp` defaults to `null` (disabled). Keep it disabled for n8n running as a HA app. Use the app's DNS hostname: `http://17153b35-ollaya:11435` when installed from this repository (the hostname is the slug with `_` replaced by `-`), or `http://local-ollaya:11435` for a local `/addons` copy. See HA app communication documentation.
 - If n8n runs on another computer, optionally publish `11435` on your LAN; **HA port mapping alone does not guarantee WAN isolation**. Restrict access with your router/firewall, do not create port forwards or expose via reverse proxies, and always use an API key. Consider a private VPN instead.
 - API key: leave HA `api_key` blank to auto-generate a random key in `/data/ollaya/api_key`, shown inside the authenticated ingress UI. Or set your own key in the HA Configuration and restart. No key is printed in the addon logs.
 
 Example n8n HTTP Request node:
 
 - Method: POST
-- URL: `http://local-ollaya:11435/api/decide` (adjust DNS hostname)
+- URL: `http://17153b35-ollaya:11435/api/decide` (`http://local-ollaya:11435` for a local `/addons` copy)
 - Header: `Authorization: Bearer <generated key>`
 - Header: `Content-Type: application/json`
 - JSON body: `{ "state": "The order shipped", "questions": { "kind": { "type": "choice", "criteria": { "important": "Requires action", "routine": "Routine notification" } } } }`
