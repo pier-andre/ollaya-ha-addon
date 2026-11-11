@@ -4,12 +4,12 @@
 
 ## Fonction et compatibilité
 
-Cette application exécute des modèles de décision Ollaya **localement sur CPU** dans Home Assistant OS Generic x86-64, sans carte graphique. Elle utilise l’image `ghcr.io/ollaya-dev/ollaya:latest`, dont le contenu peut changer à chaque reconstruction de l’application. La version de l’application et celle du moteur Ollaya sont indépendantes. L’accélération NVIDIA n’est pas encore activée.
+Cette application exécute des modèles de décision Ollaya **localement sur CPU** dans Home Assistant OS Generic x86-64, sans carte graphique. Elle utilise l’image `ghcr.io/ollaya-dev/ollaya:0.18.0`, épinglée : une reconstruction redonne toujours le même moteur, et une nouvelle version d’Ollaya arrive sous forme de pull request Renovate, qui met à jour cette ligne, le `version:` de l’application et le journal des modifications dans la même PR. Les images CUDA ne sont jamais proposées ici : cette édition est réservée au CPU. L’accélération NVIDIA n’est pas encore activée.
 
 ## Installation / mise à jour
 
 1. Ajoutez `https://github.com/pier-andre/ollaya-ha-addon` comme dépôt d’applications (menu ⋮ → **Dépôts**) puis installez **Ollaya Decision Models** ; pour du développement local, copiez plutôt le contenu du dossier `ollaya/` dans `/addons/local/ollaya/`. Le dépôt doit rester public : le Supervisor le clone sans identifiants.
-2. Actualisez le magasin d’applications, installez ou **reconstruisez/mettez à jour** l’application et vérifiez la version **0.1.7**.
+2. Actualisez le magasin d’applications, installez ou **reconstruisez/mettez à jour** l’application et vérifiez la version **0.1.8**.
 3. Configurez puis démarrez l’application. Ouvrez **Open Web UI** pour accéder à l’interface Web intégrée (ingress).
 4. Activez **Gestion des modèles**, enregistrez et redémarrez l’application.
 5. Installez `laya:en` ou un autre modèle enregistré dans Ollaya. Vérifiez sa présence dans « Modèles installés ».
@@ -64,6 +64,10 @@ Le tableau de bord présente l’état et la version du moteur, les modèles cha
 ## Limitations
 
 Les tests automatisés locaux utilisent un moteur Ollaya simulé et ne remplacent pas un essai réel avec Home Assistant Supervisor. Les éditions GPU nécessiteront une image CUDA distincte et une validation du partage des périphériques NVIDIA ; consultez `GPU_SUPPORT.md` à la racine du dépôt.
+
+## Nouveautés v0.1.8
+
+L'image de base passe de `:latest` à `ghcr.io/ollaya-dev/ollaya:0.18.0`. Les deux étiquettes pointaient vers la même empreinte au moment de la publication : rien ne change à l'exécution, mais la reconstruction devient reproductible et Renovate peut désormais proposer les versions suivantes. Aucune migration de configuration ni de modèles.
 
 ## Correction v0.1.7
 

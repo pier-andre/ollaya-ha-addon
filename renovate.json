@@ -1,7 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", ":timezone(Europe/Paris)"],
-  "schedule": ["before 7am on monday"],
   "prHourlyLimit": 2,
   "bumpVersions": [
     {
@@ -34,9 +33,9 @@
       "groupName": "GitHub Actions"
     },
     {
-      "description": "L'image Ollaya suit volontairement l'étiquette mobile `latest` : aucune PR de version ni d'épinglage de digest",
+      "description": "Édition CPU : seules les étiquettes de version X.Y.Z sont acceptées, jamais `latest` ni les images CUDA (`-cuda`, `-cuda12`)",
       "matchPackageNames": ["ghcr.io/ollaya-dev/ollaya"],
-      "enabled": false
+      "versioning": "regex:^v?(?<major>[0-9]+)[.](?<minor>[0-9]+)[.](?<patch>[0-9]+)$"
     }
   ]
 }

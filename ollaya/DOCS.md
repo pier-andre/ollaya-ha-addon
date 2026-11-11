@@ -4,12 +4,12 @@
 
 ## Purpose and compatibility
 
-Run local Ollaya decision models on Generic x86-64 Home Assistant OS without a GPU. The current app packages the CPU variant of `ghcr.io/ollaya-dev/ollaya:latest`; it does not enable NVIDIA GPU acceleration. The moving tag means each image rebuild may adopt a newer Ollaya runtime. The app version and Ollaya runtime version are independent.
+Run local Ollaya decision models on Generic x86-64 Home Assistant OS without a GPU. The current app packages the CPU variant of `ghcr.io/ollaya-dev/ollaya:0.18.0`; it does not enable NVIDIA GPU acceleration. The upstream tag is pinned rather than moving, so a rebuild always produces the same runtime, and a new Ollaya release arrives as a Renovate pull request that raises this tag, the app version and the changelog together. CUDA tags are never offered here: this edition is CPU-only.
 
 ## Install / upgrade
 
 1. Add `https://github.com/pier-andre/ollaya-ha-addon` as an app repository (⋮ → **Repositories**) and install **Ollaya Decision Models**; for local development, put the `ollaya/` directory's files in `/addons/local/ollaya/` instead. The repository must stay public: the Supervisor clones it without credentials.
-2. Refresh the Home Assistant App Store, install or **rebuild/update** the app, and confirm version **0.1.7**.
+2. Refresh the Home Assistant App Store, install or **rebuild/update** the app, and confirm version **0.1.8**.
 3. Configure the app; start it and open **Open Web UI** (Home Assistant ingress).
 4. Enable **Model management**, save the configuration, and restart the app.
 5. Install `laya:en` or another Ollaya-registered model in the web UI. Confirm it appears under Installed models.

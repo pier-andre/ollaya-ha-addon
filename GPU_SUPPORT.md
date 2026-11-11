@@ -5,7 +5,8 @@ Upstream Ollaya already provides Linux amd64 NVIDIA CUDA variants:
 - `ghcr.io/ollaya-dev/ollaya:cuda`: CUDA 13 stack, generally R580+ host drivers.
 - `ghcr.io/ollaya-dev/ollaya:cuda12`: CUDA 12 stack, generally R525+, and
   certain older Pascal/Volta GPUs even with a newer driver.
-- `ghcr.io/ollaya-dev/ollaya:latest`: CPU base, unchanged in this edition.
+- `ghcr.io/ollaya-dev/ollaya:X.Y.Z`: CPU base, pinned in `ollaya/Dockerfile` (currently
+  `0.18.0`) and advanced by Renovate; never a `-cuda` tag in this edition.
 
 ## What is missing from this Home Assistant packaging
 

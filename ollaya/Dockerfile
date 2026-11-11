@@ -1,7 +1,13 @@
-# CPU edition: deliberately follow the upstream moving latest image, per user
-# preference. Rebuilding later may install a newer Ollaya engine.
-# GPU variants must use Ollaya's :cuda or :cuda12 image and HA GPU passthrough.
-FROM ghcr.io/ollaya-dev/ollaya:latest
+# Édition CPU : image upstream épinglée à une version précise.
+# `latest` a été abandonné : une reconstruction pouvait changer de moteur sans
+# que rien ne le signale, et Renovate ne pouvait rien proposer (une étiquette
+# mobile n'a pas de version à comparer). C'est désormais la PR de Renovate qui
+# fait avancer ce numéro, avec le `version:` de config.yaml et une ligne de
+# CHANGELOG dans la même PR.
+# Les variantes GPU doivent utiliser Ollaya `:cuda` ou `:cuda12` : la règle
+# `versioning` de renovate.json n'accepte que les étiquettes X.Y.Z, donc les
+# images CUDA ne seront jamais proposées pour cette édition.
+FROM ghcr.io/ollaya-dev/ollaya:0.18.0
 USER root
 RUN apt-get update \
     && apt-get install -y --no-install-recommends python3 gosu \
