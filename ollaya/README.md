@@ -6,9 +6,13 @@ For the updated Home Assistant 0.1.7 bilingual instructions, see [DOCS.md](DOCS.
 
 **Target:** Home Assistant OS, x86-64, CPU-only, including 8 GB RAM systems. **Status:** experimental; deployed on one Home Assistant OS setup, not broadly validated.
 
-## Install locally
+## Install
 
-Copy the `ollaya/` folder into `/addons/local/ollaya/` using your preferred Home Assistant file-access mechanism. In **Settings > Add-ons > Add-on Store**, use **Check for updates / Reload**, install **Ollaya Decision Models**, and start it. The initial build uses the published upstream Ollaya CPU container. Docker/HA Supervisor downloads the container image to install the app.
+**From the repository (recommended):** in **Settings > Apps > App store**, open ⋮ → **Repositories**, add `https://github.com/pier-andre/ollaya-ha-addon`, reload, install **Ollaya Decision Models**, and start it. The repository must stay public: the Supervisor clones it without credentials. The add-on lives in the `ollaya/` folder, whose name is its slug, so Home Assistant installs it as `<hash>_ollaya`.
+
+**From a local copy (development):** copy the `ollaya/` folder into `/addons/local/ollaya/` using your preferred Home Assistant file-access mechanism. In **Settings > Apps > App store**, use **Check for updates / Reload**, install **Ollaya Decision Models**, and start it.
+
+The initial build uses the published upstream Ollaya CPU container. Docker/HA Supervisor downloads the container image to install the app.
 
 Use **Open Web UI** to access the model manager via Home Assistant ingress. The model manager is restricted to the ingress gateway address, and Home Assistant authenticates ingress users. It is not hosted on your public LAN port.
 
@@ -88,7 +92,7 @@ daemon still run as the unprivileged `ollaya` account. It does **not** change
 the permissions of the Supervisor-managed file. This staged copy is replaced
 on every app start after an options change.
 
-To upgrade a locally installed app, replace the files in
+To upgrade an app installed from this repository, use **Update** in the App Store: the image is rebuilt. To upgrade a locally installed copy, replace the files in
 `/addons/local/ollaya/`, refresh the Home Assistant App Store, confirm the app
 version increased, rebuild/reinstall or update the app, then start it. A mere
 restart of the v0.1.0 container will not incorporate Dockerfile or script

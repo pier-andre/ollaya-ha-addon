@@ -8,7 +8,7 @@ Run local Ollaya decision models on Generic x86-64 Home Assistant OS without a G
 
 ## Install / upgrade
 
-1. Put the `ollaya/` directory's files in `/addons/local/ollaya/`, or install this folder from a configured Home Assistant app repository.
+1. Add `https://github.com/pier-andre/ollaya-ha-addon` as an app repository (⋮ → **Repositories**) and install **Ollaya Decision Models**; for local development, put the `ollaya/` directory's files in `/addons/local/ollaya/` instead. The repository must stay public: the Supervisor clones it without credentials.
 2. Refresh the Home Assistant App Store, install or **rebuild/update** the app, and confirm version **0.1.7**.
 3. Configure the app; start it and open **Open Web UI** (Home Assistant ingress).
 4. Enable **Model management**, save the configuration, and restart the app.

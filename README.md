@@ -21,7 +21,11 @@ Local, CPU-only Ollaya inference with model management, a Home Assistant ingress
 
 ## Installation or upgrade
 
-Copy **the contents of `ollaya/`** to `/addons/local/ollaya/`, refresh the Home Assistant app store, **rebuild/update** the app image to version `0.1.7`, and restart. A simple restart of the old container will not pick up the translations or Python changes. Existing model data and API keys are not intentionally changed.
+**From this repository (recommended):** in Home Assistant, open **Settings → Apps → App store** → ⋮ → **Repositories**, add `https://github.com/pier-andre/ollaya-ha-addon` (the repository must stay public: the Supervisor clones it without credentials), then install **Ollaya Decision Models** and start it. The add-on lives in the `ollaya/` folder, whose name is its slug, so Home Assistant installs it as `<hash>_ollaya` with its data in `/data/apps/data/<hash>_ollaya`. Coming from a local `/addons` copy therefore means moving that folder.
+
+**From a local copy (development):** copy **the contents of `ollaya/`** to `/addons/local/ollaya/`, refresh the Home Assistant app store, **rebuild/update** the app image to version `0.1.7`, and restart. A simple restart of the old container will not pick up the translations or Python changes. Existing model data and API keys are not intentionally changed.
+
+Updates are automated by the [Renovate add-on](https://github.com/pier-andre/renovate-ha-addon), which reads `renovate.json` at the root of this repository.
 
 For full installation steps, configuration, and private networking see [English documentation](ollaya/DOCS.md) or [documentation française](ollaya/docs/fr.md).
 

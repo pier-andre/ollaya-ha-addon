@@ -8,7 +8,7 @@ Cette application exécute des modèles de décision Ollaya **localement sur CPU
 
 ## Installation / mise à jour
 
-1. Copiez le contenu du dossier `ollaya/` dans `/addons/local/ollaya/`, ou installez l’application depuis un dépôt Home Assistant configuré.
+1. Ajoutez `https://github.com/pier-andre/ollaya-ha-addon` comme dépôt d’applications (menu ⋮ → **Dépôts**) puis installez **Ollaya Decision Models** ; pour du développement local, copiez plutôt le contenu du dossier `ollaya/` dans `/addons/local/ollaya/`. Le dépôt doit rester public : le Supervisor le clone sans identifiants.
 2. Actualisez le magasin d’applications, installez ou **reconstruisez/mettez à jour** l’application et vérifiez la version **0.1.7**.
 3. Configurez puis démarrez l’application. Ouvrez **Open Web UI** pour accéder à l’interface Web intégrée (ingress).
 4. Activez **Gestion des modèles**, enregistrez et redémarrez l’application.

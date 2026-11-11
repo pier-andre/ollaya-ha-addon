@@ -1,5 +1,7 @@
 # Changelog / Journal des modifications
 
+## Non publié
+
 ## 0.1.7
 
 - Fix service startup failure on Home Assistant after enabling localization: explicitly create `/usr/local/lib/i18n` with directory mode `0755`, and ensure both catalogs are root-owned files with mode `0644`.

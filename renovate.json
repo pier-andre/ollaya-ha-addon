@@ -1,0 +1,42 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":timezone(Europe/Paris)"],
+  "schedule": ["before 7am on monday"],
+  "prHourlyLimit": 2,
+  "bumpVersions": [
+    {
+      "description": "Chaque mise à jour incrémente le patch de l'add-on (0.1.7 -> 0.1.8)",
+      "filePatterns": ["*/config.yaml"],
+      "matchStrings": ["(?:^|\\n)version:[ \\t]*\"?(?<version>\\d+\\.\\d+\\.\\d+)\"?"],
+      "bumpType": "patch"
+    }
+  ],
+  "postUpgradeTasks": {
+    "commands": [
+      "node /opt/renovate-scripts/changelog.mjs {{{depName}}} {{{currentVersion}}} {{{newVersion}}} {{{updateType}}} addons"
+    ],
+    "fileFilters": ["**/CHANGELOG.md"],
+    "executionMode": "branch"
+  },
+  "prBodyNotes": [
+    "{{#if isMajor}}:warning: **Mise à jour majeure** : vérifiez les notes de version avant de fusionner.{{/if}}",
+    "Cette PR incrémente le `version:` de `ollaya/config.yaml` et ajoute une ligne dans `ollaya/CHANGELOG.md`. Après fusion, Home Assistant proposera la mise à jour (menu ⋮ → Vérifier les mises à jour)."
+  ],
+  "packageRules": [
+    {
+      "description": "Regrouper les correctifs dans une seule PR",
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "groupName": "correctifs groupés"
+    },
+    {
+      "description": "Une seule PR pour toutes les GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions"
+    },
+    {
+      "description": "L'image Ollaya suit volontairement l'étiquette mobile `latest` : aucune PR de version ni d'épinglage de digest",
+      "matchPackageNames": ["ghcr.io/ollaya-dev/ollaya"],
+      "enabled": false
+    }
+  ]
+}
