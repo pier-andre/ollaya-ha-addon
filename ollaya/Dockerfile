@@ -13,7 +13,7 @@
 FROM ghcr.io/ollaya-dev/ollaya:0.18.0
 USER root
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3 gosu \
+    && apt-get install -y --no-install-recommends python3 gosu rsync \
     && rm -rf /var/lib/apt/lists/*
 COPY --chmod=0755 start.sh /usr/local/bin/ollaya-ha-start
 COPY --chmod=0644 server.py /usr/local/lib/ollaya-ha-server.py

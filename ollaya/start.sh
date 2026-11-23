@@ -48,6 +48,31 @@ esac
 # changing ownership of potentially large existing model files on every start.
 install -d -o ollaya -g ollaya -m 0700 "$DATA_DIR"
 install -d -o ollaya -g ollaya -m "$MODELS_MODE" "$MODELS_DIR"
+
+# When model_directory changed, move the already-downloaded models from the
+# previous location. The previous location is recorded in a private file under
+# /data; without that record, the historical default is assumed. When the same
+# file exists in both places, rsync keeps the newest one (--update) and removes
+# the source copy only after the transfer succeeded. Empty source folders are
+# then removed. The record is only updated when nothing is left behind.
+LOCATION_FILE="$DATA_DIR/models_location"
+if [ -f "$LOCATION_FILE" ]; then
+  PREVIOUS_DIR="$(cat "$LOCATION_FILE")"
+else
+  PREVIOUS_DIR="$DATA_DIR/models"
+fi
+if [ "$PREVIOUS_DIR" != "$MODELS_DIR" ] && [ -d "$PREVIOUS_DIR" ]; then
+  echo "[ollaya-ha] moving models from $PREVIOUS_DIR to $MODELS_DIR"
+  rsync -a --update --remove-source-files "$PREVIOUS_DIR/" "$MODELS_DIR/"
+  find "$PREVIOUS_DIR" -mindepth 1 -type d -empty -delete
+fi
+LEFT_BEHIND="$(find "$PREVIOUS_DIR" -mindepth 1 2>/dev/null | head -n 1 || true)"
+if [ -z "$LEFT_BEHIND" ]; then
+  printf '%s\n' "$MODELS_DIR" > "$LOCATION_FILE"
+else
+  echo "[ollaya-ha] WARNING: $LEFT_BEHIND still present in $PREVIOUS_DIR; models_location not updated" >&2
+fi
+
 export OLLAYA_HA_DATA="$DATA_DIR"
 export OLLAYA_HA_MODELS="$MODELS_DIR"
 

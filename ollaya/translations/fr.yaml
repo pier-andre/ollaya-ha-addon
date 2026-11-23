@@ -7,7 +7,7 @@ configuration:
     description: Autoriser l'installation et la suppression de modèles dans l'interface Web authentifiée. Désactiver après la configuration. Les modèles installés restent sélectionnables.
   model_directory:
     name: Dossier des modèles
-    description: Emplacement des poids des modèles. /data/ollaya les exclut des sauvegardes de l’application. /share/ollaya les rend visibles dans le dossier share, mais ils sont alors inclus dans les sauvegardes de Home Assistant. Changer cette option ne déplace pas les modèles existants.
+    description: Emplacement des poids des modèles. /data/ollaya les exclut des sauvegardes de l’application. /share/ollaya les rend visibles dans le dossier share, mais ils sont alors inclus dans les sauvegardes de Home Assistant. Changer cette option déplace les modèles déjà téléchargés vers le nouvel emplacement au prochain démarrage ; quand un fichier existe aux deux emplacements, la copie la plus récente est conservée.
   keep_alive:
     name: Durée de conservation en mémoire
     description: Temps pendant lequel un modèle reste chargé après la dernière requête (par exemple, 5m).
