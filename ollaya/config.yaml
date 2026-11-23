@@ -1,6 +1,6 @@
 name: Ollaya Decision Models
 slug: ollaya
-version: "0.1.10"
+version: "0.1.11"
 description: CPU-only local inference for Ollaya decision models with an ingress model manager; this app never uses a GPU
 url: https://github.com/pier-andre/ollaya-ha-addon/tree/main/ollaya
 arch:
@@ -27,10 +27,13 @@ ports_description:
   11435/tcp: Optional LAN API. Leave disabled for app-to-app access over the Home Assistant network.
 # The weights are 4-5 GB and reproducible by pulling again, so the default
 # location keeps them out of the app backup. This only applies while
-# model_directory is /data/ollaya.
+# model_directory is /data/ollaya. Entries are matched with `Path.match` against
+# `/data/addons/data/<slug>/<path>`, right-anchored, so an absolute `/data/...`
+# path never matches: 0.1.10 still shipped ~4.1 GB of weights in every backup.
+# Naming the directory is enough — a directory that matches is not walked, so its
+# whole content is left out of the archive (verified on a throwaway app).
 backup_exclude:
-  - "/data/ollaya/models"
-  - "/data/ollaya/models/*"
+  - "*/ollaya/models"
 options:
   default_model: laya:en
   model_downloads_enabled: false

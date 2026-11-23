@@ -2,6 +2,16 @@
 
 ## Non publié
 
+## 0.1.11
+
+- Fix the weights exclusion. `backup_exclude` entries are matched with `Path.match` against `/data/addons/data/<slug>/<path>`, right-anchored, so the absolute `/data/ollaya/models` added in 0.1.10 never matched and every backup still carried ~4.1 GB of weights. The pattern is now `*/ollaya/models`; a directory that matches is not walked, so all of its content is left out. Confirmed on a throwaway app: the excluded tree was absent from the archive and the rest was present.
+- Nothing else changes: no option, no default and no runtime path is touched.
+
+### Résumé 0.1.11
+
+- Correction de l'exclusion des poids. Les entrées de `backup_exclude` sont comparées par `Path.match` à `/data/addons/data/<slug>/<chemin>`, ancré à droite : le chemin absolu `/data/ollaya/models` ajouté en 0.1.10 ne correspondait jamais et chaque sauvegarde transportait encore environ 4,1 Go de poids. Le motif devient `*/ollaya/models` ; un dossier qui correspond n'est pas parcouru, tout son contenu est donc écarté de l'archive. Vérifié sur une application jetable : l'arborescence exclue était absente, le reste présent.
+- Aucun autre changement : ni option, ni valeur par défaut, ni chemin d'exécution.
+
 ## 0.1.10
 
 - New **`model_directory`** option with two locations: `/data/ollaya` (default, unchanged) and `/share/ollaya`. Weights live in `<model_directory>/models`; `/share` is now mapped read-write so the second choice is reachable at all.
