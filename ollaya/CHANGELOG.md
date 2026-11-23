@@ -1,10 +1,10 @@
 # Changelog / Journal des modifications
 
-## Non publié
+## 0.1.12
 
 - Changing `model_directory` now moves already-downloaded models from the previous directory to the new one at the next start, using `rsync` (added to the image). When the same file exists in both, the newest copy is kept and empty old folders are removed. The previous location is recorded in `/data/ollaya/models_location`.
 
-### Résumé non publié
+## 0.1.12
 
 - Changer `model_directory` déplace désormais les modèles déjà téléchargés de l'ancien dossier vers le nouveau au prochain démarrage. L'emplacement précédent est enregistré dans `/data/ollaya/models_location` ; avec `rsync` (ajouté à l'image). Quand le même fichier existe aux deux emplacements, la copie la plus récente est conservée et les anciens dossiers vides sont supprimés.
 

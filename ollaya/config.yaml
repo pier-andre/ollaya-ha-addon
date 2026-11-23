@@ -1,6 +1,6 @@
 name: Ollaya Decision Models
 slug: ollaya
-version: "0.1.11"
+version: "0.1.12"
 description: CPU-only local inference for Ollaya decision models with an ingress model manager; this app never uses a GPU
 url: https://github.com/pier-andre/ollaya-ha-addon/tree/main/ollaya
 arch:
