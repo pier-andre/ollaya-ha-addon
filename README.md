@@ -1,10 +1,17 @@
-# Ollaya Decision Models for Home Assistant OS — v0.1.9
+# Ollaya Decision Models for Home Assistant OS — v0.1.10
 
 **[Français](README.fr.md) | English**
 
 Local, CPU-only Ollaya inference with model management, a Home Assistant ingress UI, and an authenticated API for n8n and other internal clients.
 
 [![Open your Home Assistant instance and show the add app repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fpier-andre%2Follaya-ha-addon) [![Open your Home Assistant instance and open the Ollaya app page.](https://my.home-assistant.io/badges/supervisor_app.svg)](https://my.home-assistant.io/redirect/supervisor_app/?app=17153b35_ollaya&repository_url=https%3A%2F%2Fgithub.com%2Fpier-andre%2Follaya-ha-addon)
+
+## Changes in 0.1.10
+
+- New **`model_directory`** option: `/data/ollaya` (default, unchanged) or `/share/ollaya`. Weights live in `<model_directory>/models`; `/share` is now mapped read-write so the second location is reachable.
+- `/data/ollaya/models` is declared in `backup_exclude`: a Home Assistant backup keeps the configuration, API key and selected model but no longer the 4–5 GB of weights, which are reproducible by pulling again.
+- Changing the option does not move existing models; the startup script only creates the target directory and passes the resolved path to the server (`OLLAYA_HA_MODELS` → `OLLAYA_MODELS`).
+- `/config` is deliberately not offered: write access to the whole Home Assistant configuration is not needed to solve backup size.
 
 ## Changes in 0.1.9
 
@@ -21,7 +28,7 @@ Local, CPU-only Ollaya inference with model management, a Home Assistant ingress
 
 - Fix language catalog directory permissions preventing startup under the unprivileged `ollaya` user on Home Assistant OS.
 - Add a Docker build-time English/French catalog smoke test executed as `ollaya`.
-- Preserve the bilingual UI, model management settings, and upstream Ollaya `:latest` policy from v0.1.6.
+- Preserve the bilingual UI, model management settings, and the upstream Ollaya base image from v0.1.6 (then `:latest`, pinned to an explicit tag from 0.1.8).
 
 ## Features retained from 0.1.6
 
@@ -30,13 +37,13 @@ Local, CPU-only Ollaya inference with model management, a Home Assistant ingress
 - Native Home Assistant settings translations in `ollaya/translations/en.yaml` and `fr.yaml`.
 - Ingress manager English and French catalogs with browser-language detection and an explicit language switch; choice is saved as a non-sensitive cookie.
 - English docs in `ollaya/DOCS.md`, French docs in `ollaya/docs/fr.md`.
-- Existing API compatibility, `/data/ollaya/models` storage, privacy-safe diagnostics, and Ollaya `:latest` CPU base image retained.
+- Existing API compatibility, `/data/ollaya/models` storage, privacy-safe diagnostics, and the CPU base image retained (then `:latest`, pinned to an explicit tag from 0.1.8).
 
 ## Installation or upgrade
 
 **From this repository (recommended):** in Home Assistant, open **Settings → Apps → App store** → ⋮ → **Repositories**, add `https://github.com/pier-andre/ollaya-ha-addon` (the repository must stay public: the Supervisor clones it without credentials), then install **Ollaya Decision Models** and start it. The add-on lives in the `ollaya/` folder, whose name is its slug, so Home Assistant installs it as `17153b35_ollaya` with its data in `/data/apps/data/17153b35_ollaya`. The `17153b35` prefix is the first eight hex characters of the SHA-1 of the repository URL, so it is predictable and stays put while the URL is added exactly as written above. Coming from a local `/addons` copy (installed as `local_ollaya`) therefore means moving `/data/apps/data/local_ollaya` to `/data/apps/data/17153b35_ollaya`.
 
-**From a local copy (development):** copy **the contents of `ollaya/`** to `/addons/local/ollaya/`, refresh the Home Assistant app store, **rebuild/update** the app image to version `0.1.9`, and restart. A simple restart of the old container will not pick up the translations or Python changes. Existing model data and API keys are not intentionally changed.
+**From a local copy (development):** copy **the contents of `ollaya/`** to `/addons/local/ollaya/`, refresh the Home Assistant app store, **rebuild/update** the app image to version `0.1.10`, and restart. A simple restart of the old container will not pick up the translations or Python changes. Existing model data and API keys are not intentionally changed.
 
 Updates are automated by the [Renovate add-on](https://github.com/pier-andre/renovate-ha-addon), which reads `renovate.json` at the root of this repository.
 

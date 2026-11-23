@@ -403,7 +403,15 @@ class ProxyTest(unittest.TestCase):
             self.assertIn("11435/tcp:", yaml_text)
         for file in ("DOCS.md", "docs/fr.md"):
             self.assertTrue((root / file).exists())
-        self.assertIn("ghcr.io/ollaya-dev/ollaya:latest", (root / "Dockerfile").read_text())
+        # The base image stays pinned to an X.Y.Z tag: a moving `:latest` let a
+        # rebuild change the runtime silently, and renovate.json's regex versioning
+        # only accepts X.Y.Z (which also excludes the CUDA tags).
+        dockerfile = (root / "Dockerfile").read_text(encoding="utf-8")
+        self.assertRegex(
+            dockerfile,
+            re.compile(r"^FROM ghcr\.io/ollaya-dev/ollaya:\d+\.\d+\.\d+$", re.M),
+        )
+        self.assertNotIn("ghcr.io/ollaya-dev/ollaya:latest", dockerfile)
 
     def test_select_and_reset(self):
         code, _ = self.admin_request("POST", "/select", "model=laya%3Aen&csrf=" + self.mod.CSRF)

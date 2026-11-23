@@ -2,6 +2,22 @@
 
 ## Non publié
 
+## 0.1.10
+
+- New **`model_directory`** option with two locations: `/data/ollaya` (default, unchanged) and `/share/ollaya`. Weights live in `<model_directory>/models`; `/share` is now mapped read-write so the second choice is reachable at all.
+- `/data/ollaya/models` is declared in `backup_exclude`. A Home Assistant backup of this app keeps its options, API key and selected model but no longer carries the 4–5 GB of weights, which were inflating every backup and are reproducible by pulling again.
+- Switching the option does not move existing models: the startup script only creates the target directory. It resolves the option once, rejects anything outside the two documented paths, and exports `OLLAYA_HA_MODELS`; the server logs that path, shows it in ingress and passes it to the daemon as `OLLAYA_MODELS`.
+- `/config` is deliberately not offered. Giving an inference app write access to the whole Home Assistant configuration is not required to fix backup size.
+- Startup regression test now asserts the resolved path, plus a new case that aborts startup on an unknown `model_directory`.
+
+### Résumé 0.1.10
+
+- Nouvelle option **`model_directory`** à deux emplacements : `/data/ollaya` (par défaut, inchangé) et `/share/ollaya`. Les poids sont stockés dans `<model_directory>/models` ; `/share` est désormais monté en lecture-écriture pour rendre le second choix accessible.
+- `/data/ollaya/models` est déclaré dans `backup_exclude` : une sauvegarde Home Assistant conserve les options, la clé API et le modèle sélectionné, mais ne transporte plus les 4 à 5 Go de poids, reproductibles par un nouveau téléchargement.
+- Changer d’option ne déplace pas les modèles existants : le script de démarrage crée seulement le dossier cible. Il résout l’option une fois, refuse tout chemin hors des deux emplacements documentés et exporte `OLLAYA_HA_MODELS` ; le serveur journalise ce chemin, l’affiche dans l’interface et le transmet au moteur sous `OLLAYA_MODELS`.
+- `/config` n’est volontairement pas proposé : donner à une application d’inférence l’accès en écriture à toute la configuration Home Assistant n’est pas nécessaire pour régler la taille des sauvegardes.
+- Le test de démarrage vérifie désormais le chemin résolu, avec un nouveau cas qui interrompt le démarrage sur un `model_directory` inconnu.
+
 ## 0.1.9
 
 - The CPU-only nature of the app is now explicit in the app description, in the startup log (`CPU-only edition: Ollaya runs with OLLAYA_DEVICE=cpu`) and in the English/French documentation. `OLLAYA_DEVICE` is fed by a single `DEVICE` constant instead of a literal.

@@ -55,7 +55,7 @@ assert stage.parent.stat().st_uid == 0
 # App data is writable by the service account; persistent model files remain
 # in /data/ollaya/models, not beside the Supervisor-owned options.json.
 data = pathlib.Path(os.environ["OLLAYA_HA_DATA"])
-models = data / "models"
+models = pathlib.Path(os.environ["OLLAYA_HA_MODELS"])
 assert data.stat().st_uid == os.geteuid()
 assert models.stat().st_uid == os.geteuid()
 assert stat.S_IMODE(data.stat().st_mode) == 0o700
@@ -79,6 +79,7 @@ print("configuration staged; service privileges dropped")
                    "PATH": str(bindir) + ":" + os.environ["PATH"],
                    "OLLAYA_HA_SOURCE_OPTIONS": str(options),
                    "OLLAYA_HA_DATA": str(models),
+                   "OLLAYA_HA_MODELS": str(models / "models"),
                    "OLLAYA_HA_RUN_DIR": str(runtime)}
             result = subprocess.run(["/bin/sh", str(ROOT / "ollaya" / "start.sh")],
                                     env=env, text=True, capture_output=True, timeout=20)
@@ -90,6 +91,35 @@ print("configuration staged; service privileges dropped")
                                    env=env, text=True, capture_output=True, timeout=20)
             self.assertEqual(0, rerun.returncode, rerun.stdout + rerun.stderr)
             self.assertEqual("persisted after restart", (models / "models" / "write-test.txt").read_text())
+
+    def test_unknown_model_directory_is_rejected(self):
+        """A model_directory outside the documented list must abort startup."""
+        if os.geteuid() != 0 or not shutil.which("runuser"):
+            self.skipTest("requires root and runuser")
+        try:
+            pwd.getpwnam("ollaya")
+        except KeyError:
+            self.skipTest("requires ollaya system user and group")
+
+        with tempfile.TemporaryDirectory(prefix="ollaya-startup-") as root_name:
+            root = Path(root_name)
+            options = root / "options.json"
+            options.write_text(
+                json.dumps({"default_model": "laya:en", "model_directory": "/tmp/elsewhere"}),
+                encoding="utf-8",
+            )
+            options.chmod(0o600)
+            data = root / "data" / "ollaya"
+            data.mkdir(parents=True)
+            (root / "run").mkdir()
+            env = {**os.environ,
+                   "OLLAYA_HA_SOURCE_OPTIONS": str(options),
+                   "OLLAYA_HA_DATA": str(data),
+                   "OLLAYA_HA_RUN_DIR": str(root / "run" / "ollaya-ha")}
+            result = subprocess.run(["/bin/sh", str(ROOT / "ollaya" / "start.sh")],
+                                    env=env, text=True, capture_output=True, timeout=20)
+            self.assertNotEqual(0, result.returncode, result.stdout + result.stderr)
+            self.assertIn("unsupported model_directory", result.stderr)
 
 
 if __name__ == "__main__":

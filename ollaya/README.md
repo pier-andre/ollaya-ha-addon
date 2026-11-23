@@ -25,19 +25,29 @@ Use **Open Web UI** to access the model manager via Home Assistant ingress. The 
 ## Persistent model storage
 
 Home Assistant Supervisor gives each app its own writable `/data` volume. This
-app keeps Ollaya model weights in **`/data/ollaya/models`** and stores its
+app keeps Ollaya model weights in **`<model_directory>/models`** —
+**`/data/ollaya/models`** by default — and stores its
 selected-model override and generated API key under `/data/ollaya/`. Both survive
 container restarts and app image updates; the paths belong to **this Ollaya app**
 and are distinct from another app's `/data/ollama` folder.
+
+Pick **`/share/ollaya`** in the `model_directory` option to keep the weights in
+the share folder instead, visible from Samba, the File editor and other apps.
+The default `/data/ollaya/models` is listed in `backup_exclude`, so Home
+Assistant backups keep this app's configuration and keys but not the 4–5 GB of
+weights, which you pull again after a restore. Switching the option does not
+move existing files.
 
 `/data/options.json` is a separate Home Assistant Supervisor-managed file and
 may be root-only (`0600`). The startup script stages a private read-only copy in
 `/run/ollaya-ha/options.json` before switching to the unprivileged `ollaya`
 account. It never changes permissions on the Supervisor configuration file.
 
-The Ollaya daemon receives `OLLAYA_MODELS=/data/ollaya/models` explicitly. The
+The Ollaya daemon receives `OLLAYA_MODELS=<model_directory>/models` explicitly.
+The
 startup script creates the directories with ownership `ollaya:ollaya` and mode
-`0700`; it does not recursively change permissions of downloaded models on
+`0700` (`0755` under `/share`, so the folder stays usable); it does not
+recursively change permissions of downloaded models on
 subsequent boots. The ingress model manager displays the active storage path.
 
 ## API/network access
@@ -71,7 +81,7 @@ With 8 GB host RAM, use `laya:en` first, `max_loaded_models: 1`, and keep-alive 
 
 ## Maintenance and limitations
 
-- This CPU prototype intentionally builds against `ghcr.io/ollaya-dev/ollaya:latest`, as requested. Rebuilds may change the upstream Ollaya runtime version.
+- The CPU build pins `ghcr.io/ollaya-dev/ollaya` to an explicit `X.Y.Z` tag (`0.18.0` at the time of writing). Rebuilds therefore stay reproducible, and the Renovate add-on proposes upstream upgrades as pull requests that also bump `version:` and the `CHANGELOG`.
 - App version is independent of Ollaya runtime version.
 - No true per-process outbound firewall is implemented. Download control applies to the exposed interfaces and manager; other outbound behavior from the upstream process is not separately sandboxed.
 - UI override persisted in `/data/ollaya/selected_model.txt` takes precedence over `default_model` after an add-on restart until Reset override is pressed.
@@ -161,8 +171,10 @@ For authenticated monitoring, query `GET /health` at the inference API port
 with `Authorization: Bearer <API key>`; returns JSON `status: ready` (200) or
 `status: unavailable` (503). The root endpoint still indicates only that the proxy listens.
 
-`ghcr.io/ollaya-dev/ollaya:latest` is deliberately kept as the image base. A rebuild
-may bring in an untested upstream release; record the Ollaya version when troubleshooting.
+`ghcr.io/ollaya-dev/ollaya` is pinned to an explicit `X.Y.Z` tag, never `:latest`.
+A rebuild keeps that exact upstream release, so the runtime cannot change behind
+your back; a Renovate pull request is what moves the pin, and the pinned version
+is worth recording when troubleshooting.
 
 GPU support is **not** enabled in this CPU-only app. Read
 [`../docs/gpu/README.md`](../docs/gpu/README.md) for why CUDA cannot work on Home

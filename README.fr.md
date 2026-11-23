@@ -1,10 +1,17 @@
-# Ollaya Decision Models pour Home Assistant OS — v0.1.9
+# Ollaya Decision Models pour Home Assistant OS — v0.1.10
 
 **Français | [English](README.md)**
 
 Application Home Assistant à inférence Ollaya locale sur processeur (CPU), avec gestion des modèles dans l’interface Web intégrée et API authentifiée pour n8n et les autres applications du réseau interne.
 
 [![Ouvrir votre instance Home Assistant et afficher le dialogue d’ajout du dépôt avec l’URL pré-remplie.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fpier-andre%2Follaya-ha-addon) [![Ouvrir votre instance Home Assistant et afficher la page de l’application Ollaya.](https://my.home-assistant.io/badges/supervisor_app.svg)](https://my.home-assistant.io/redirect/supervisor_app/?app=17153b35_ollaya&repository_url=https%3A%2F%2Fgithub.com%2Fpier-andre%2Follaya-ha-addon)
+
+## Nouveautés de la version 0.1.10
+
+- Nouvelle option **`model_directory`** : `/data/ollaya` (par défaut, inchangé) ou `/share/ollaya`. Les poids sont stockés dans `<model_directory>/models` ; `/share` est désormais monté en lecture-écriture pour rendre le second emplacement accessible.
+- `/data/ollaya/models` est déclaré dans `backup_exclude` : une sauvegarde Home Assistant conserve la configuration, la clé API et le modèle sélectionné, mais plus les 4 à 5 Go de poids, reproductibles par un nouveau téléchargement.
+- Changer d’option ne déplace pas les modèles existants ; le script de démarrage crée seulement le dossier cible et transmet le chemin résolu au serveur (`OLLAYA_HA_MODELS` → `OLLAYA_MODELS`).
+- `/config` n’est volontairement pas proposé : l’accès en écriture à toute la configuration Home Assistant n’est pas nécessaire pour régler la taille des sauvegardes.
 
 ## Nouveautés de la version 0.1.9
 
@@ -21,7 +28,7 @@ Application Home Assistant à inférence Ollaya locale sur processeur (CPU), ave
 
 - Corrige les permissions du dossier de traduction qui empêchaient le démarrage du service Ollaya après la mise à jour précédente.
 - Vérifie pendant la construction que le compte `ollaya` peut lire les fichiers anglais et français.
-- Conserve la gestion des modèles, les paramètres bilingues et l'image Ollaya `:latest`.
+- Conserve la gestion des modèles, les paramètres bilingues et l'image Ollaya (alors `:latest`, épinglée à partir de 0.1.8).
 
 ## Fonctionnalités conservées de la version 0.1.6
 
@@ -30,13 +37,13 @@ Application Home Assistant à inférence Ollaya locale sur processeur (CPU), ave
 - Traductions natives des options Home Assistant : `ollaya/translations/en.yaml` et `fr.yaml`.
 - Interface de gestion en anglais et en français, avec détection de la langue du navigateur et sélecteur manuel. Le choix est mémorisé dans un témoin de langue sans données sensibles.
 - Documentation en [anglais](ollaya/DOCS.md) et en [français](ollaya/docs/fr.md).
-- Conservation de l’API actuelle, des modèles dans `/data/ollaya/models`, des diagnostics sans contenu de courriel et de l’image Ollaya CPU `:latest`.
+- Conservation de l’API actuelle, des modèles dans `/data/ollaya/models`, des diagnostics sans contenu de courriel et de l’image Ollaya CPU (alors `:latest`, épinglée à partir de 0.1.8).
 
 ## Installation ou mise à jour
 
 **Depuis ce dépôt (recommandé) :** dans Home Assistant, ouvrez **Paramètres → Applications → Magasin d’applications** → menu ⋮ → **Dépôts**, ajoutez `https://github.com/pier-andre/ollaya-ha-addon` (le dépôt doit rester public : le Supervisor le clone sans identifiants), puis installez **Ollaya Decision Models** et démarrez-la. L’application vit dans le dossier `ollaya/`, dont le nom est son identifiant : elle devient `17153b35_ollaya`, avec ses données dans `/data/apps/data/17153b35_ollaya`. Le préfixe `17153b35` correspond aux huit premiers caractères hexadécimaux du SHA-1 de l’URL du dépôt : il est donc prévisible et ne change pas tant que l’URL est ajoutée exactement telle qu’écrite ci-dessus. Passer d’une copie locale dans `/addons` (identifiant `local_ollaya`) implique donc de déplacer `/data/apps/data/local_ollaya` vers `/data/apps/data/17153b35_ollaya`.
 
-**Depuis une copie locale (développement) :** copiez **le contenu du dossier `ollaya/`** dans `/addons/local/ollaya/`, actualisez le magasin des applications Home Assistant, puis **reconstruisez/mettez à jour l’image** vers la version `0.1.9` et redémarrez. Un simple redémarrage de l’ancien conteneur ne suffit pas. Les modèles installés et les clés API existantes ne doivent pas être modifiés.
+**Depuis une copie locale (développement) :** copiez **le contenu du dossier `ollaya/`** dans `/addons/local/ollaya/`, actualisez le magasin des applications Home Assistant, puis **reconstruisez/mettez à jour l’image** vers la version `0.1.10` et redémarrez. Un simple redémarrage de l’ancien conteneur ne suffit pas. Les modèles installés et les clés API existantes ne doivent pas être modifiés.
 
 Les mises à jour sont automatisées par l’[application Renovate](https://github.com/pier-andre/renovate-ha-addon), qui lit le fichier `renovate.json` à la racine de ce dépôt.
 

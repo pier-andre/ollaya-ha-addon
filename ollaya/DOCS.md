@@ -11,7 +11,7 @@ The upstream tag is pinned rather than moving, so a rebuild always produces the 
 ## Install / upgrade
 
 1. Add `https://github.com/pier-andre/ollaya-ha-addon` as an app repository (⋮ → **Repositories**) and install **Ollaya Decision Models**; for local development, put the `ollaya/` directory's files in `/addons/local/ollaya/` instead. The repository must stay public: the Supervisor clones it without credentials.
-2. Refresh the Home Assistant App Store, install or **rebuild/update** the app, and confirm version **0.1.9**.
+2. Refresh the Home Assistant App Store, install or **rebuild/update** the app, and confirm version **0.1.10**.
 3. Configure the app; start it and open **Open Web UI** (Home Assistant ingress).
 4. Enable **Model management**, save the configuration, and restart the app.
 5. Install `laya:en` or another Ollaya-registered model in the web UI. Confirm it appears under Installed models.
@@ -25,6 +25,7 @@ The upstream tag is pinned rather than moving, so a rebuild always produces the 
 |---|---|---|---|
 | Default model | `default_model` | `laya:en` | Used when API requests omit the model; an ingress selection overrides until reset. |
 | Model management | `model_downloads_enabled` | `false` | Allows installing **and removing** models; keep off between maintenance windows. |
+| Model directory | `model_directory` | `/data/ollaya` | `/data/ollaya` keeps the weights out of app backups; `/share/ollaya` makes them visible in the share folder but includes them in backups. Changing it does not move existing models. |
 | Keep model loaded | `keep_alive` | `5m` | Time before unloading an idle model. |
 | Maximum loaded models | `max_loaded_models` | `1` | Recommended for limited RAM. |
 | CPU threads | `threads` | `2` | Tune carefully on shared hardware. |
@@ -35,7 +36,7 @@ Home Assistant provides native **English and French labels** through `translatio
 
 ## Models and storage
 
-Ollaya uses the persistent, app-private path `/data/ollaya/models` for downloaded model weights, and `/data/ollaya/` for the generated API key and selected-model override. Supervisor owns `/data/options.json` separately. No previous model files need to be moved for this release.
+Model weights are stored in **`<model_directory>/models`**: `/data/ollaya/models` by default, or `/share/ollaya/models` when that option is selected. `/data/ollaya/models` is declared in `backup_exclude`, so a Home Assistant backup of this app keeps its configuration, API key and selected model but leaves the 4–5 GB of weights out; pull the models again after a restore. Switching the option **does not move existing files** — move the directory yourself or pull again. The generated API key and selected-model override always stay in `/data/ollaya/`, and Supervisor owns `/data/options.json` separately.
 
 `laya:en` is the English checkpoint. The `laya` alias downloads both English and multilingual models; `laya:multilingual` is a separate checkpoint. You can pull any model **registered in Ollaya's registry**, not arbitrary Hugging Face repository URLs. Registry pulls contact upstream registry/Hugging Face hosts; inference occurs locally. Disabling model management blocks **the app's installation/removal controls**, but is **not a network firewall** or equivalent to disabling all outbound traffic at OS level.
 

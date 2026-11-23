@@ -5,6 +5,9 @@ configuration:
   model_downloads_enabled:
     name: Model management
     description: Allow model installation and removal in the authenticated web interface. Leave disabled after setup. Existing models remain selectable.
+  model_directory:
+    name: Model directory
+    description: Where model weights are stored. /data/ollaya keeps them out of app backups. /share/ollaya makes them visible in the share folder, but they are then included in Home Assistant backups. Changing this does not move existing models.
   keep_alive:
     name: Keep model loaded
     description: Duration to keep a model in memory after the last request (for example, 5m).

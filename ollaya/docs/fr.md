@@ -25,6 +25,7 @@ L’image upstream est épinglée plutôt que mobile : une reconstruction redonn
 |---|---|---|---|
 | Modèle par défaut | `default_model` | `laya:en` | Utilisé quand la requête n'indique pas de modèle. Un choix dans l’interface prévaut jusqu’à sa réinitialisation. |
 | Gestion des modèles | `model_downloads_enabled` | `false` | Autorise **l’installation et la suppression** ; à désactiver hors des périodes de maintenance. |
+| Dossier des modèles | `model_directory` | `/data/ollaya` | `/data/ollaya` exclut les poids des sauvegardes de l’application ; `/share/ollaya` les rend visibles dans le dossier share mais les inclut dans les sauvegardes. Le changement ne déplace pas les modèles existants. |
 | Durée de conservation en mémoire | `keep_alive` | `5m` | Temps avant de décharger un modèle inactif. |
 | Nombre maximal de modèles chargés | `max_loaded_models` | `1` | Recommandé avec peu de RAM. |
 | Fils d’exécution CPU | `threads` | `2` | À ajuster selon la charge de la machine. |
@@ -35,7 +36,7 @@ Les libellés des options Home Assistant utilisent `translations/en.yaml` et `tr
 
 ## Modèles et stockage
 
-Les poids des modèles sont conservés dans `/data/ollaya/models`, un emplacement persistant et privé à cette application. La clé API générée et le choix du modèle se trouvent dans `/data/ollaya/`. Le fichier `/data/options.json` est géré séparément par Supervisor. La mise à jour ne nécessite aucun déplacement de données.
+Les poids des modèles sont conservés dans **`<model_directory>/models`** : `/data/ollaya/models` par défaut, ou `/share/ollaya/models` si cette option est choisie. `/data/ollaya/models` est déclaré dans `backup_exclude` : une sauvegarde Home Assistant de cette application conserve sa configuration, la clé API et le modèle sélectionné, mais laisse de côté les 4 à 5 Go de poids, à retélécharger après une restauration. Changer l’option **ne déplace pas les fichiers existants** : déplacez le dossier vous-même ou refaites un téléchargement. La clé API générée et le choix du modèle restent toujours dans `/data/ollaya/`, et `/data/options.json` est géré séparément par Supervisor.
 
 `laya:en` désigne le modèle anglophone. L’alias `laya` installe les modèles anglais et multilingue; `laya:multilingual` désigne le modèle multilingue seul. L’installation accepte les modèles **enregistrés dans le registre Ollaya**, et non des URL Hugging Face arbitraires. Le téléchargement contacte le registre et les serveurs Hugging Face ; **l’inférence est locale**. Désactiver la gestion des modèles protège les commandes de l’application, mais **ne constitue pas un pare-feu sortant**.
 

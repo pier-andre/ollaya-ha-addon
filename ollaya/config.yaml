@@ -1,6 +1,6 @@
 name: Ollaya Decision Models
 slug: ollaya
-version: "0.1.9"
+version: "0.1.10"
 description: CPU-only local inference for Ollaya decision models with an ingress model manager; this app never uses a GPU
 url: https://github.com/pier-andre/ollaya-ha-addon/tree/main/ollaya
 arch:
@@ -16,13 +16,25 @@ panel_title: Ollaya Models
 panel_icon: mdi:brain
 panel_admin: true
 host_network: false
+# /share is mounted so that model_directory can point there. /config is
+# deliberately not mapped: this app never needs write access to the Home
+# Assistant configuration just to choose where weights live.
+map:
+  - share:rw
 ports:
   11435/tcp: null
 ports_description:
   11435/tcp: Optional LAN API. Leave disabled for app-to-app access over the Home Assistant network.
+# The weights are 4-5 GB and reproducible by pulling again, so the default
+# location keeps them out of the app backup. This only applies while
+# model_directory is /data/ollaya.
+backup_exclude:
+  - "/data/ollaya/models"
+  - "/data/ollaya/models/*"
 options:
   default_model: laya:en
   model_downloads_enabled: false
+  model_directory: /data/ollaya
   keep_alive: 5m
   max_loaded_models: 1
   threads: 2
@@ -31,6 +43,7 @@ options:
 schema:
   default_model: str
   model_downloads_enabled: bool
+  model_directory: list(/data/ollaya|/share/ollaya)
   keep_alive: str
   max_loaded_models: int(1,3)
   threads: int(1,32)

@@ -23,6 +23,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
 DATA = Path(os.environ.get("OLLAYA_HA_DATA", "/data/ollaya"))
+# Weights live in <model_directory>/models. start.sh resolves the option,
+# creates the directory and exports the result; /data/ollaya stays the default.
+MODELS = Path(os.environ.get("OLLAYA_HA_MODELS") or (DATA / "models"))
 OPTIONS = Path(os.environ.get("OLLAYA_HA_OPTIONS", "/data/options.json"))
 DAEMON_HOST = os.environ.get("OLLAYA_HA_DAEMON_HOST", "127.0.0.1")
 DAEMON_PORT = int(os.environ.get("OLLAYA_HA_DAEMON_PORT", "11436"))
@@ -41,6 +44,7 @@ DEVICE = "cpu"
 DEFAULTS = {
     "default_model": "laya:en",
     "model_downloads_enabled": False,
+    "model_directory": "/data/ollaya",
     "keep_alive": "5m",
     "max_loaded_models": 1,
     "threads": 2,
@@ -688,7 +692,7 @@ a{{color:#b0e4ee}}nav{{text-align:right}}
 
 def main():
     DATA.mkdir(parents=True, exist_ok=True)
-    print(f"[ollaya-ha] Persistent model storage: {DATA / 'models'}", flush=True)
+    print(f"[ollaya-ha] Persistent model storage: {MODELS}", flush=True)
     print(
         f"[ollaya-ha] CPU-only edition: Ollaya runs with OLLAYA_DEVICE={DEVICE}; "
         "no GPU acceleration is used or available (see docs/gpu/README.md)",
@@ -699,7 +703,7 @@ def main():
     env = dict(os.environ)
     env.update({
         "OLLAYA_HOST": f"{DAEMON_HOST}:{DAEMON_PORT}",
-        "OLLAYA_MODELS": str(DATA / "models"),
+        "OLLAYA_MODELS": str(MODELS),
         "OLLAYA_DEVICE": DEVICE,
         "OLLAYA_KEEP_ALIVE": str(CONFIG.get("keep_alive") or "5m"),
         "OLLAYA_MAX_LOADED_MODELS": str(CONFIG.get("max_loaded_models") or 1),
